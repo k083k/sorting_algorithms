@@ -1,55 +1,37 @@
 #include "sort.h"
 /**
- * quick_sort - function that sorts an array
- * of integers in ascending order
- * @array: input arrray
+ * selection_sort - sorts an array of integers in ascending order
+ * @array: the array
  * @size: size of the array
- * Return: no return
+ * Return: void
  */
-void quick_sort(int *array, size_t size)
+/*  using the Selection sort algorithm */
+void selection_sort(int *array, size_t size)
 {
-	_qsort(array, 0, size - 1, size);
-}
-/**
- * _qsort - function for the
- * quick_sort function
- * @a: input arrray
- * @low: index for the first element
- * @high: index for the last element
- * @size: size of the array
- * Return: no return
- */
-void _qsort(int *a, int low, int high, int size)
-{
-	int p, w, i;
-	int tmp;
 
-	if (low < high)
+	size_t i, j, jmin;
+	int aux, min;
+
+	if (!array || size < 2)
+		return;
+	for (i = 0; i < size - 1; i++)
 	{
-		p = high;
-		w = low;
-		for (i = low; i < high; i++)
+		min = array[i];
+		jmin = i;
+		for (j = i + 1; j < size; j++)
+		if (array[j] < min)
 		{
-			if (a[i] < a[p])
-			{
-				if (i != w)
-				{
-					tmp = a[i];
-					a[i] = a[w];
-					a[w] = tmp;
-					print_array(a, size);
-				}
-				w++;
-			}
+			/* found new minimum; remember its index */
+			min = array[j];
+			jmin = j;
 		}
-		if (w != p && a[w] != a[p])
-		{
-			tmp = a[w];
-			a[w] = a[p];
-			a[p] = tmp;
-			print_array(a, size);
-		}
-		_qsort(a, low, w - 1, size);
-		_qsort(a, w + 1, high, size);
+
+	if (jmin != i)
+	{
+		aux = array[i];
+		array[i] = array[jmin];
+		array[jmin] = aux;
+		print_array(array, size);
+	}
 	}
 }
