@@ -4,12 +4,13 @@
 
 
 /**
- * bubble_sort = Implementation of bubble sort
+ * bubble_sort - Implementation of bubble sort
  * @array: array of integers to be sorted
  * @size: size of the array (number of elements)
  *
  * Return: void
  */
+
 void bubble_sort(int *array, size_t size)
 {
 	size_t i, j;
