@@ -1,64 +1,84 @@
 #include "sort.h"
+#include <stdio.h>
+/**
+ * swap_nums - swaps numbers
+ *
+ * @arr: input array
+ * @a: first index
+ * @b: second index
+ * Return: no return
+ */
+void swap_nums(int *arr, int a, int b)
+{
+	arr[a] = arr[a] + arr[b];
+	arr[b] = arr[a] - arr[b];
+	arr[a] = arr[a] - arr[b];
+}
 
 /**
- * heap_sort - sorts an array of integers in
- * ascending order using the Heap sort algorithm
- * @array: the array to be sorted
+ * recursion_heap - recursion that builds the max heap tree
+ *
+ * @arr: input array
+ * @i: index number
  * @size: size of the array
- * Return: void
+ * @limit: limit of the array
+ * Return: no return
+ */
+void recursion_heap(int *arr, int i, size_t size, int limit)
+{
+	int bigger;
+	int i2;
+
+	i2 = i * 2;
+
+	if (i2 + 2 < limit)
+	{
+		recursion_heap(arr, i2 + 1, size, limit);
+		recursion_heap(arr, i2 + 2, size, limit);
+	}
+
+	if (i2 + 1 >= limit)
+		return;
+
+	if (i2 + 2 < limit)
+		bigger = (arr[i2 + 1] > arr[i2 + 2]) ? (i2 + 1) : (i2 + 2);
+	else
+		bigger = i2 + 1;
+
+	if (arr[i] < arr[bigger])
+	{
+		swap_nums(arr, i, bigger);
+		print_array(arr, size);
+		recursion_heap(arr, bigger, size, limit);
+	}
+}
+
+/**
+ * heap_sort - sorts an array of integers in ascending
+ * order using the Heap sort algorithm
+ *
+ * @array: input array
+ * @size: size of the array
  */
 void heap_sort(int *array, size_t size)
 {
 	int i;
+	size_t limit;
 
-	if (!array || size < 2)
+	if (!array || size == 0)
 		return;
-	for (i = size / 2; i >= 0; i--)
-		heapify(array, size, i, size);
-	for (i = size - 1; i >= 0; i--)
+
+	i = 0;
+	limit = size;
+
+	while (limit > 1)
 	{
-		swap(&array[i], &array[0]);
-		if (i != 0)
+		recursion_heap(array, i, size, limit);
+		if (array[i] >= array[limit - 1])
+		{
+			swap_nums(array, i, limit - 1);
 			print_array(array, size);
-		heapify(array, i, 0, size);
+		}
+		limit--;
 	}
-}
-/**
- * heapify - Recursive function to sort binary tree
- * @array: array to be sorted as a binary
- * @end: Last node in binary tree
- * @i: First node of binary tree
- * @size: Size of the array to sort
- * Return: void
- */
-void heapify(int *array, int end, int i, size_t size)
-{
-	int max = i;
-	int left = 2 * i + 1;
-	int right = 2 * i + 2;
-
-	if (!array || size < 2)
-		return;
-	if (left < end && array[left] > array[max])
-		max = left;
-	if (right < end && array[right] > array[max])
-		max = right;
-	if (i != max)
-	{
-		swap(&array[i], &array[max]);
-		print_array(array, size);
-		heapify(array, end, max, size);
-	}
-}
-/**
- * swap - swap function
- * @a: intger
- * @b: integer
- * Return: void
- */
-void swap(int *a, int *b)
-{
-	int tmp = *b;
-	*b = *a;
-	*a = tmp;
 }
